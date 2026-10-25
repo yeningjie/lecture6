@@ -16,7 +16,7 @@ void main() {
     await tester.tap(find.text('个人名片（课堂案例）'));
     await tester.pumpAndSettle();
 
-    expect(find.text('林小满'), findsOneWidget);
+    expect(find.text('叶宁杰'), findsOneWidget);
     expect(find.text('128'), findsOneWidget);
     expect(find.text('Flutter'), findsOneWidget);
   });

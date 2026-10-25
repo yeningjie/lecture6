@@ -152,7 +152,7 @@ Row(
 - `Flexible` 与 `Expanded` 的区别：`Expanded` 强制子项撑满分到的空间，`Flexible` 允许子项**小于**分配空间，因此适合文本按内容收缩；
 - `maxLines: 1` + `overflow: TextOverflow.ellipsis`：超长文本只占一行，末尾省略号，不再向外溢出。
 
-验证：第②组不加保护时控制台报 `A RenderFlex overflowed by 174 pixels on the right.`（用临时 widget 测试捕获到同一数值）；改用 `Flexible + ellipsis` 后复测零告警，截图见 `flex_overflow.png` 与 `flex_fix.png`。
+验证：第②组不加保护时控制台报 `A RenderFlex overflowed by 174 pixels on the right.`（用临时 widget 测试捕获到同一数值）；改用 `Flexible + ellipsis` 后复测零告警，截图见 `flex_all.png`（同屏覆盖①②③三态）。
 
 ## 五、检查点结果
 
@@ -195,14 +195,13 @@ Row(
 
 1. `profile_card.png` —— 个人名片页最终效果：渐变头像环 + 在线徽标、三个 Expanded 统计块、Wrap 标签云、胶囊按钮；
 2. `alignment.png` —— 对齐任务卡：六种 `mainAxisAlignment` 场景同屏对照，每张卡标注参数；
-3. `flex_ratio.png` —— 三栏 2:1:1 正常效果：50% / 25% / 25% 色块按 flex 分配；
-4. `flex_overflow.png` —— 第三栏内容超长：浏览器右侧黄黑条 + 终端 `RenderFlex overflowed by 174 pixels` 告警同框；
-5. `flex_fix.png` —— 同一内容改用 `Flexible + ellipsis` 后截断显示，无黄黑条；
-6. `stack.png` —— 两个层叠场景：头像右下角在线徽标、封面图底部浮层文字；
-7. `container.png` —— 容器美化：白底圆角阴影卡片、渐变卡片、ClipOval/ClipRRect 剪裁；
-8. `inspector.png` —— DevTools Widget Inspector：选中超长栏内层 Row，查看 constraints 与 size，核对 156px 可用宽度与 330px 实际尺寸；
-9. `flutter_doctor.png` —— `flutter doctor` 输出：Flutter 3.47.4 与目标平台状态；
-10. `git_log.png` —— `git log --oneline --graph`：各步骤提交记录与远程同步情况。
+3. `flex_all.png` —— 弹性分配实验同屏对照（一屏覆盖三态）：① flex 2:1:1 的 50%/25%/25%；② 超长内容产生黄黑条；③ 改用 `Flexible + ellipsis` 后无告警；
+4. `stack.png` —— 两个层叠场景：头像右下角在线徽标、封面图底部浮层文字；
+5. `container.png` —— 容器美化：白底圆角阴影卡片、渐变卡片、ClipOval/ClipRRect 剪裁；
+6. `flex_overflow_log.png` —— 控制台证据：第②组未加保护时 Console 输出 `A RenderFlex overflowed by 174 pixels on the right.`；
+7. `inspector.png` —— DevTools Widget Inspector：选中超长栏内层 Row，查看 constraints 与 size，核对 156px 可用宽度与 330px 实际尺寸；
+8. `flutter_doctor.png` —— `flutter doctor` 输出：Flutter 3.47.4 与目标平台状态；
+9. `git_log.png` —— `git log --oneline --graph --decorate --all`：各步骤提交记录与远程同步情况。
 
 ## 九、自评
 
