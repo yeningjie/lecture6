@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'pages/profile_card_page.dart';
+import 'pages/demo_index_page.dart';
 
 void main() {
   runApp(const ProfileCardApp());
@@ -19,7 +19,7 @@ class ProfileCardApp extends StatelessWidget {
         useMaterial3: true,
         scaffoldBackgroundColor: const Color(0xFFF4F6FB),
       ),
-      home: const ProfileCardPage(),
+      home: const DemoIndexPage(),
     );
   }
 }
