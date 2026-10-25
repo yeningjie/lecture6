@@ -37,4 +37,5 @@ feat: profile skeleton with alignment
 feat: card decoration & status badge
 feat: alignment, flex, stack and container demos
 docs: README and progress report
+fix: reproducible flex overflow demo
 ```

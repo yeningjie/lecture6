@@ -35,7 +35,9 @@
 9. 自主实践：新增演示目录页，逐页实现六种对齐（2 列卡片，宽屏一屏可见）、三栏 2:1:1 与超长溢出对照、两个层叠角标场景、三个容器美化例子；
 10. 提交 4：`feat: alignment, flex, stack and container demos`；
 11. 验证：`dart analyze lib test` 输出 `No issues found!`，`flutter test` 两个用例通过，`flutter build web` 构建成功；
-12. 提交 5：`docs: README and progress report`；按截图清单运行各页面并截取证据存入 `docs/screenshots/`，提交 6 后推送 GitHub。
+12. 提交 5：`docs: README and progress report`；
+13. 复测发现溢出像素数会随窗口宽度变化，把弹性演示板固定为 688 宽、超长标签固定 308 宽，使溢出稳定为 174px；提交 6：`fix: reproducible flex overflow demo`；
+14. 按截图清单运行各页面并截取证据存入 `docs/screenshots/`，提交 7 后推送 GitHub。
 
 ## 四、关键代码
 
@@ -162,7 +164,7 @@ Row(
 
 **问题 1（真实发生）**：弹性实验第②组运行后右侧出现黄黑条，控制台打印 `A RenderFlex overflowed by 174 pixels on the right.`
 
-- 定位过程：先读源码——第三栏由 `Expanded(flex: 1)` 分到约 (420-32)÷4 ≈ 97px 的紧约束；栏内是一个普通 `Row`，其中图标 16px + 间距 6px + 不换行文本的固有宽度约 249px，合计 271px，超出约 174px。再用 Widget Inspector 选中内层 `Row`，Layout Explorer 显示 `maxWidth ≈ 97`、`size.width ≈ 271`，与手算一致，确认是"内层 Row 的内容宽度超过紧约束"而非外层比例算错。
+- 定位过程：先读源码——在 688 宽的演示板上，第三栏由 `Expanded(flex: 1)` 分到 172px，扣除左右内边距 8+8 后可用 156px；栏内是普通 `Row`，图标 16px + 间距 6px + 固定宽度 308px 的超长标签，合计 330px，超出 174px。再用 Widget Inspector 选中内层 `Row`，Layout Explorer 显示 `maxWidth ≈ 156`、`size.width ≈ 330`，与手算一致，确认是"内层 Row 的内容宽度超过紧约束"而非外层比例算错。
 - 解决方案：把超长文本改为 `Flexible` + `maxLines: 1` + `TextOverflow.ellipsis`，让文本在可用宽度内截断；复测第③组无任何告警。另用临时 widget 测试捕获同一错误文本确认数值为 174，验证后删除该临时测试。
 
 **问题 2（真实发生）**：为了统一卡片样式，最初在演示卡片的 `_Card` 包装层加了 `ClipRRect`，结果第②组的黄黑条被裁掉，看不到溢出实验现象。
@@ -198,7 +200,7 @@ Row(
 5. `flex_fix.png` —— 同一内容改用 `Flexible + ellipsis` 后截断显示，无黄黑条；
 6. `stack.png` —— 两个层叠场景：头像右下角在线徽标、封面图底部浮层文字；
 7. `container.png` —— 容器美化：白底圆角阴影卡片、渐变卡片、ClipOval/ClipRRect 剪裁；
-8. `inspector.png` —— DevTools Widget Inspector：选中统计条/超长栏查看 constraints 与 size，核对 97px 紧约束与 271px 实际尺寸；
+8. `inspector.png` —— DevTools Widget Inspector：选中超长栏内层 Row，查看 constraints 与 size，核对 156px 可用宽度与 330px 实际尺寸；
 9. `flutter_doctor.png` —— `flutter doctor` 输出：Flutter 3.47.4 与目标平台状态；
 10. `git_log.png` —— `git log --oneline --graph`：各步骤提交记录与远程同步情况。
 
